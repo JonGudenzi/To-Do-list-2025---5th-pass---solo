@@ -15,10 +15,9 @@ function addTask(text) {
     saveTasks();
 }
 
-
-function render(index) {
+function render() {
 taskList.innerHTML = "";
-tasks.forEach(function(task) {
+tasks.forEach(function(task, index) {
 const li = document.createElement("li");
 li.textContent = task.text;
 li.dataset.index = index;
@@ -29,23 +28,34 @@ const deleteBtn = document.createElement("button");
 deleteBtn.textContent = "X";
 li.appendChild(deleteBtn);
 li.addEventListener("click", toggleTask);
+deleteBtn.addEventListener("click", function(event){
+event.stopPropagation();
+const li = document.closest("li");
+const index = li.dataset.index;
+deleteTask(index);
+})
 taskList.appendChild(li);
 })
 }
 
-
-function toggleTask() {
-
+function toggleTask(event) {
+const li = event.target;
+const index = li.dataset.index;
+tasks[index].completed = !tasks[index].completed;
+render();
+saveTasks();
 }
 
 
-function deleteTask() {
-
+function deleteTask(index) {
+tasks.splice(index, 1);
+render();
+saveTasks();
 }
-
 
 function saveTasks() {
-
+const taskString = JSON.stringify(tasks);
+localStorage.setItem("task", taskString);
 }
 
 
@@ -60,6 +70,8 @@ function handleSubmit(event) {
     const userText = taskInput.value.trim();
     if (userText === "") {
         errorMsg.textContent = "Please enter a task";
+        taskInput.focus();
+        return;
     }
     errorMsg.textContent = "";
     addTask(userText);
