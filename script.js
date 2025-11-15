@@ -30,7 +30,7 @@ function render() {
         li.addEventListener("click", toggleTask);
         deleteBtn.addEventListener("click", function (event) {
             event.stopPropagation();
-            const li = deleteBtn.closest("li");
+            const li = event.target.closest("li");
             const index = li.dataset.index;
             deleteTask(index);
         })
@@ -46,7 +46,6 @@ function toggleTask(event) {
     saveTasks();
 }
 
-
 function deleteTask(index) {
     tasks.splice(index, 1);
     render();
@@ -57,7 +56,6 @@ function saveTasks() {
     const taskString = JSON.stringify(tasks);
     localStorage.setItem("task", taskString);
 }
-
 
 function loadTasks() {
     const savedData = localStorage.getItem("task");
