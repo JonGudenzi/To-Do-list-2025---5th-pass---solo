@@ -21,9 +21,7 @@ function render() {
         const li = document.createElement("li");
         li.textContent = task.text;
         li.dataset.index = index;
-        if (task.completed) {
-            li.classList.add("completed");
-        }
+        if (task.completed) {li.classList.add("completed");}
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "X";
         li.appendChild(deleteBtn);
